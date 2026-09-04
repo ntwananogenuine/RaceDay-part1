@@ -1,5 +1,7 @@
 -- creating as database
 CREATE DATABASE RaceDayDB;
+
+-- using database
 USE RaceDayDB;
 
 
