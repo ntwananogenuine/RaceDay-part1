@@ -1,0 +1,58 @@
+name: Validate Repository Structure
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check /docs folder exists
+        run: |
+          if [ ! -d "docs" ]; then
+            echo "/docs folder is missing"
+            exit 1
+          fi
+          echo "/docs folder found"
+
+      - name: Check for ERD image (PNG or PDF)
+        run: |
+          if ! find docs -iname "*erd*" \( -iname "*.png" -o -iname "*.pdf" \) | grep -q .; then
+            echo "No ERD image (PNG/PDF) found in /docs"
+            exit 1
+          fi
+          echo "ERD image found"
+
+      - name: Check for endpoint plan document
+        run: |
+          if ! find docs -iname "*endpoint*" \( -iname "*.pdf" -o -iname "*.md" \) | grep -q .; then
+            echo "No endpoint plan (PDF/Markdown) found in /docs"
+            exit 1
+          fi
+          echo "Endpoint plan found"
+
+      - name: Check for SQL script
+        run: |
+          if ! find docs -iname "*.sql" | grep -q .; then
+            echo "No .sql script found in /docs"
+            exit 1
+          fi
+          echo "SQL script found"
+
+      - name: Check for README
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "README.md is missing"
+            exit 1
+          fi
+          echo "README.md found"
+
+      - name: All checks passed
+        run: echo "Repository structure is valid"
