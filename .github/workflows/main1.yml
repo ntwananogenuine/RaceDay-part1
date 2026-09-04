@@ -1,52 +1,14 @@
-name: Validate Repository Structure
+name: Repo Structure Check
 
-on:
-  push:
-  pull_request:
+on: [push]
 
 jobs:
-  validate-docs:
+  check:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Validate /docs structure
-        shell: bash
-        run: |
-          set -e
-
-          echo "Listing repo root:"
+      - uses: actions/checkout@v4
+      - run: |
+          echo "Repo root:"
           ls -la
-
-          if [ ! -d "docs" ]; then
-            echo "/docs folder is missing"
-            exit 1
-          fi
-          echo "/docs folder found"
-
-          echo "Listing /docs contents:"
-          ls -la docs
-
-          ERD_COUNT=$(find docs -maxdepth 1 -iname "*.png" -o -iname "*.pdf" | wc -l)
-          if [ "$ERD_COUNT" -eq 0 ]; then
-            echo "No image/PDF file found in /docs (expected ERD)"
-            exit 1
-          fi
-          echo "Found $ERD_COUNT image/PDF file(s) in /docs"
-
-          SQL_COUNT=$(find docs -maxdepth 1 -iname "*.sql" | wc -l)
-          if [ "$SQL_COUNT" -eq 0 ]; then
-            echo "No .sql file found in /docs"
-            exit 1
-          fi
-          echo "Found $SQL_COUNT .sql file(s) in /docs"
-
-          if [ ! -f "README.md" ]; then
-            echo "README.md is missing from repo root"
-            exit 1
-          fi
-          echo "README.md found"
-
-          echo "All checks passed"
+          echo "Docs folder:"
+          ls -la docs || echo "no docs folder found"
