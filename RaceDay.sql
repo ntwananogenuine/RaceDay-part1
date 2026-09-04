@@ -1,7 +1,7 @@
 CREATE DATABASE RaceDayDB;
 USE RaceDayDB;
 
---this is the
+--this is the db tables
 CREATE TABLE dbo.Roles (
     RoleId      INT IDENTITY(1,1) PRIMARY KEY,
     RoleName    VARCHAR(20) NOT NULL UNIQUE
