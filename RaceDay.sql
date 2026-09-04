@@ -4,12 +4,12 @@ CREATE DATABASE RaceDayDB;
 -- using database
 USE RaceDayDB;
 
--- creating a table of roles
+-- creating a table of Roles
 CREATE TABLE dbo.Roles (
     RoleId      INT IDENTITY(1,1) PRIMARY KEY,
     RoleName    VARCHAR(20) NOT NULL UNIQUE
 );
-
+-- creating a table of Users
 CREATE TABLE dbo.Users (
     UserId          INT IDENTITY(1,1) PRIMARY KEY,
     RoleId          INT NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE dbo.Users (
     CreatedAt       DATETIME NOT NULL DEFAULT GETDATE(),
     CONSTRAINT FK_Users_Roles FOREIGN KEY (RoleId) REFERENCES dbo.Roles(RoleId)
 );
-
+-- creating a table of Events
 CREATE TABLE dbo.Events (
     EventId         INT IDENTITY(1,1) PRIMARY KEY,
     OrganiserId     INT NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE dbo.Events (
     Location        VARCHAR(150) NOT NULL,
     CONSTRAINT FK_Events_Users FOREIGN KEY (OrganiserId) REFERENCES dbo.Users(UserId)
 );
-
+-- creating a table of Categories
 CREATE TABLE dbo.Categories (
     CategoryId      INT IDENTITY(1,1) PRIMARY KEY,
     EventId         INT NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE dbo.Categories (
     MaxParticipants INT NOT NULL DEFAULT 100,
     CONSTRAINT FK_Categories_Events FOREIGN KEY (EventId) REFERENCES dbo.Events(EventId)
 );
-
+-- creating a table of Enrolments
 CREATE TABLE dbo.Enrolments (
     EnrolmentId     INT IDENTITY(1,1) PRIMARY KEY,
     ParticipantId   INT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE dbo.Enrolments (
     CONSTRAINT UQ_Enrolments_Participant_Category UNIQUE (ParticipantId, CategoryId),
     CONSTRAINT UQ_Enrolments_Bib_Category UNIQUE (CategoryId, BibNumber)
 );
-
+-- creating a table of Results
 CREATE TABLE dbo.Results (
     ResultId        INT IDENTITY(1,1) PRIMARY KEY,
     EnrolmentId     INT NOT NULL UNIQUE,
